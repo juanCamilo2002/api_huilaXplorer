@@ -1,0 +1,68 @@
+# Entornos virtuales
+venv/
+env/
+ENV/
+.venv/
+.ENV/
+
+# Archivos de Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.swp
+
+# Archivos de configuración
+*.env
+.env.local
+.env.*.local
+
+# Archivos de la base de datos
+db.sqlite3
+
+# Archivos de migración de Django
+**/migrations/*
+!**/migrations/__init__.py
+
+# Archivos de compilación
+*.log
+*.pot
+*.mo
+*.compilated/
+*.egg-info/
+dist/
+build/
+*.eggs/
+*.wheel/
+
+# Directorios de medios y archivos estáticos
+staticfiles/
+media/
+static/
+mediafiles/
+
+# Archivos relacionados con IDEs
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Archivos de despliegue y configuración específicos del servidor
+*.pid
+*.log
+*.seed
+*.lock
+*.cover
+*.coverage
+.tox/
+.scrapy/
+docs/_build/
+target/
+pip-log.txt
+pip-delete-this-directory.txt
+htmlcov/
+
+# Archivos de administración de dependencias
+*.lock
+Pipfile.lock
+poetry.lock
