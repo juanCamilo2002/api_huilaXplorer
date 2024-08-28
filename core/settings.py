@@ -29,7 +29,7 @@ DJANGO_APPS = [
 
 PROJECT_APPS = ["apps.user"]
 
-LOCAL_APPS = []
+LOCAL_APPS = ['apps.tourist_spots']
 
 THIRD_PARTY_APPS = [
     "corsheaders",
@@ -56,10 +56,17 @@ MIDDLEWARE = [
 ]
 
 STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "OPTIONS": {
+            "location": "media/",  # O la ruta que prefieras para almacenar los archivos
+        },
+    },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
+
 
 ROOT_URLCONF = 'core.urls'
 
