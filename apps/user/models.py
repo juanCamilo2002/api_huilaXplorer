@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from apps.activities_turisitc_spots.models import Activities 
 
 
 class UserAccountManager(BaseUserManager):
@@ -38,6 +39,8 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     code_reset_password = models.CharField(max_length=6, blank=True, null=True)
     expiration_code_reset_password = models.DateTimeField(
         blank=True, null=True)
+    
+    preferred_activities = models.ManyToManyField(Activities, related_name='preferred_activities', blank=True)
 
     objects = UserAccountManager()
 

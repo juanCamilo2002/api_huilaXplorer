@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import TouristSpot, TouristSpotsImage
+from apps.events_spots.admin import EventSpotInline
 # Register your models here.
 
 class TouristSpotImageInline(admin.TabularInline):
@@ -10,7 +11,7 @@ class TouristSpotImageInline(admin.TabularInline):
 class TouristSpotAdmin(admin.ModelAdmin):
     list_display = ('name', 'longitude', 'latitude')
     search_fields = ('name', 'description')
-    inlines = [TouristSpotImageInline]
+    inlines = [TouristSpotImageInline, EventSpotInline]
 
 
 admin.site.register(TouristSpot, TouristSpotAdmin)

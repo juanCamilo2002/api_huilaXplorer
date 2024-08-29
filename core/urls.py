@@ -12,6 +12,8 @@ urlpatterns = [
 
     path('', include('apps.user.urls')),
     path('', include('apps.tourist_spots.urls')),
+    path('', include('apps.activities_turisitc_spots.urls')),
+    path('', include('apps.events_spots.urls')),
 
     path('admin/', admin.site.urls),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

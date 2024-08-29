@@ -29,7 +29,11 @@ DJANGO_APPS = [
 
 PROJECT_APPS = ["apps.user"]
 
-LOCAL_APPS = ['apps.tourist_spots']
+LOCAL_APPS = [
+    'apps.tourist_spots',
+    'apps.activities_turisitc_spots',
+    'apps.events_spots',
+]
 
 THIRD_PARTY_APPS = [
     "corsheaders",
@@ -210,5 +214,5 @@ if not DEBUG:
 
 
 # Nexmo API
-VONAGE_API_KEY= env('VONAGE_API_KEY')
-VONAGE_API_SECRET= env('VONAGE_API_SECRET')
+VONAGE_API_KEY = env('VONAGE_API_KEY')
+VONAGE_API_SECRET = env('VONAGE_API_SECRET')
