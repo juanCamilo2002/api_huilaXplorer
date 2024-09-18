@@ -1,5 +1,5 @@
 from .models import TouristRoute
-from .serializers import TouristRouteSerializer, SuccessResponseSerializer, ErrorResponseSerializer
+from .serializers import TouristRouteSerializer, SuccessTouristRoutesResponseSerializer, ErrorTouristRoutesResponseSerializer
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from .custom_persmissions import IsOwner
@@ -16,9 +16,9 @@ class UserTouristRoutesAPIView(APIView):
         summary='Get user tourist routes',
         description='This endpoint is used to get the tourist routes of the authenticated user',
         responses={
-            200: SuccessResponseSerializer,
-            400: ErrorResponseSerializer,
-            404: ErrorResponseSerializer
+            200: SuccessTouristRoutesResponseSerializer,
+            400: ErrorTouristRoutesResponseSerializer,
+            404: ErrorTouristRoutesResponseSerializer
         },
     )
     def get(self, request):
@@ -69,8 +69,8 @@ class DeleteTouristRouteAPIView(APIView):
         summary='Delete tourist route',
         description='This endpoint is used to delete a tourist route',
         responses={
-            204: SuccessResponseSerializer,
-            404: ErrorResponseSerializer
+            204: SuccessTouristRoutesResponseSerializer,
+            404: ErrorTouristRoutesResponseSerializer
         },
     )
     def delete(self, request, pk):
