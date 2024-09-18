@@ -67,8 +67,8 @@ class TouristRouteSerializer(serializers.ModelSerializer):
         return instance
 
 
-class SuccessResponseSerializer(serializers.Serializer):
+class SuccessTouristRoutesResponseSerializer(serializers.Serializer):
     message = serializers.CharField()
 
-class ErrorResponseSerializer(serializers.Serializer):
+class ErrorTouristRoutesResponseSerializer(serializers.Serializer):
     error = serializers.CharField()
