@@ -71,3 +71,28 @@ class UserSerializer(serializers.ModelSerializer):
                     )
 
         return instance
+
+
+class VerifyCodeSerializer(serializers.Serializer):
+    code = serializers.CharField(max_length=6)
+    phone_number = serializers.CharField(max_length=10)
+
+
+class SendCodeSerializer(serializers.Serializer):
+    phone_number = serializers.CharField(max_length=10)
+
+class ResetPasswordSerializer(serializers.Serializer):
+    phone_number = serializers.CharField(max_length=10)
+    code = serializers.CharField(max_length=6)
+    new_password = serializers.CharField(max_length=255)
+    re_new_password = serializers.CharField(max_length=255)
+
+
+
+class ErrorResponseSerializer(serializers.Serializer):
+    error = serializers.CharField()
+
+class SuccessResponseSerializer(serializers.Serializer):
+    message = serializers.CharField()
+
+   

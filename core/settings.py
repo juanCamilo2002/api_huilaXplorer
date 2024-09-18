@@ -44,6 +44,7 @@ THIRD_PARTY_APPS = [
     'social_django',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
+    'drf_spectacular',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + LOCAL_APPS + THIRD_PARTY_APPS
@@ -152,6 +153,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly'
     ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
@@ -218,3 +220,10 @@ if not DEBUG:
 # Nexmo API
 VONAGE_API_KEY = env('VONAGE_API_KEY')
 VONAGE_API_SECRET = env('VONAGE_API_SECRET')
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Huilaxplorer API',
+    'DESCRIPTION': 'API for Huilaxplorer project',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
