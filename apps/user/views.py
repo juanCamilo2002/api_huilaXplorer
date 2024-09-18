@@ -5,8 +5,9 @@ from rest_framework import status, permissions
 from django.contrib.auth import get_user_model
 from .utils import send_verification_code, send_reset_pass_code
 from django.utils import timezone
-from .serializers import UserSerializer
+from .serializers import UserSerializer, VerifyCodeSerializer, SendCodeSerializer, ResetPasswordSerializer, ErrorResponseSerializer, SuccessResponseSerializer
 from .custom_permissions import IsAdminOrIsSelf
+from drf_spectacular.utils import extend_schema
 
 User = get_user_model()
 
@@ -14,7 +15,20 @@ User = get_user_model()
 class VerifyAccountCodeNumber(APIView):
     permission_classes = [permissions.AllowAny]
 
+    @extend_schema(
+        summary='Verify account code number',
+        description="This endpoint is used to verify the account code number",
+        responses={
+            200: SuccessResponseSerializer,
+            400: ErrorResponseSerializer,
+            404: ErrorResponseSerializer
+        },
+        request=VerifyCodeSerializer
+    )
     def post(self, request, format=None, *args, **kwargs):
+        """
+        This endpoint is used to verify the account code number
+        """
         phone_number = request.data.get('phone_number')
         code = request.data.get('code')
 
@@ -34,8 +48,18 @@ class VerifyAccountCodeNumber(APIView):
 
 
 class ResendVerificationCode(APIView):
+
     permission_classes = [permissions.AllowAny]
 
+    @extend_schema(
+        summary='Resend verification code',
+        description="This endpoint is used to resend the verification code",
+        responses={
+            200: SuccessResponseSerializer,
+            404: ErrorResponseSerializer
+        },
+        request=SendCodeSerializer
+    )
     def post(self, request, format=None, *args, **kwargs):
         phone_number = request.data.get('phone_number')
 
@@ -54,6 +78,15 @@ class ResendVerificationCode(APIView):
 class SendResetPasswordCode(APIView):
     permission_classes = [permissions.AllowAny]
 
+    @extend_schema(
+        summary='Send reset password code',
+        description="This endpoint is used to send the reset password code",
+        responses={
+            200: SuccessResponseSerializer,
+            400: ErrorResponseSerializer,
+            404: ErrorResponseSerializer},
+        request=SendCodeSerializer
+    )
     def post(self, request, format=None, *args, **kwargs):
         phone_number = request.data.get('phone_number')
 
@@ -75,6 +108,16 @@ class SendResetPasswordCode(APIView):
 class ResetPassword(APIView):
     permission_classes = [permissions.AllowAny]
 
+    @extend_schema(
+        summary='Reset password',
+        description="This endpoint is used to reset the password of an account",
+        responses={
+            200: SuccessResponseSerializer,
+            400: ErrorResponseSerializer,
+            404: ErrorResponseSerializer
+        },
+        request=ResetPasswordSerializer
+    )
     def post(self, request, format=None, *args, **kwargs):
 
         phone_number = request.data.get('phone_number')

@@ -65,3 +65,10 @@ class TouristRouteSerializer(serializers.ModelSerializer):
         ActivityRoute.objects.bulk_create(new_activities)
 
         return instance
+
+
+class SuccessResponseSerializer(serializers.Serializer):
+    message = serializers.CharField()
+
+class ErrorResponseSerializer(serializers.Serializer):
+    error = serializers.CharField()
