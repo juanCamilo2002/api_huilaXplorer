@@ -1,7 +1,6 @@
 from rest_framework.views import APIView
-from rest_framework import viewsets
+from rest_framework import viewsets, status, permissions, filters
 from rest_framework.response import Response
-from rest_framework import status, permissions
 from django.contrib.auth import get_user_model
 from .utils import send_verification_code, send_reset_pass_code
 from django.utils import timezone
@@ -152,6 +151,8 @@ class ResetPassword(APIView):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['first_name', 'last_name', 'phone_number', 'email']
 
     def get_permissions(self):
         actions = ['retrieve', 'update', 'partial_update', 'destroy']
