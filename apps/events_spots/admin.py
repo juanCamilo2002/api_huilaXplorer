@@ -4,7 +4,7 @@ from .models import EventSpot
 class EventSpotInline(admin.TabularInline):
     model = EventSpot
     extra = 1
-    fields = ['name', 'date']
+    fields = ['name', 'date', 'description']
 
 
 class EventSpotAdmin(admin.ModelAdmin):

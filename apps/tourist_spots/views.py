@@ -1,11 +1,12 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions, filters
 from .models import TouristSpot, TouristSpotsImage, LocationSpot
-from rest_framework import permissions
 from .serializers import TouristSpotImageSerializer, TouristSpotSerializer, LocationSpotSerializer
 
 class LocationSoptViewSet(viewsets.ModelViewSet):
     queryset = LocationSpot.objects.all()
     serializer_class = LocationSpotSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name']
 
     def get_permissions(self):
         actions = ['update', 'partial_update', 'destroy', 'create']
@@ -20,6 +21,8 @@ class LocationSoptViewSet(viewsets.ModelViewSet):
 class TouristSpotViewSet(viewsets.ModelViewSet):
     queryset = TouristSpot.objects.all()
     serializer_class = TouristSpotSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name', 'description', 'latitude', 'longitude', 'location__name']
 
     def get_permissions(self):
         actions = ['update', 'partial_update', 'destroy', 'create']
