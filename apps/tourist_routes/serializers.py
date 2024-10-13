@@ -1,7 +1,5 @@
 from rest_framework import serializers
 from .models import TouristRoute, ActivityRoute
-from apps.tourist_spots.serializers import TouristSpotSerializer
-from apps.user.serializers import UserSerializer
 
 
 class ActivityRouteSerializer(serializers.ModelSerializer):

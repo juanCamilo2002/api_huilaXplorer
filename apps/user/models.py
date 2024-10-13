@@ -41,6 +41,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
         blank=True, null=True)
     
     preferred_activities = models.ManyToManyField(Activities, related_name='preferred_activities', blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, )
 
     objects = UserAccountManager()
 
