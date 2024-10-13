@@ -19,9 +19,8 @@ class UserCreateSerializer(UserCreateSerializer):
         model = User
         fields = "__all__"
         extra_kwargs = {
-            'password': {'write_only': True}
+            'password': {'write_only': True, 'required': False},  # No requerido
         }
-
 
 class UserSerializer(serializers.ModelSerializer):
     preferred_activities = ActivitiesSerializer(many=True, required=False)

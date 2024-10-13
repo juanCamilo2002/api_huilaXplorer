@@ -1,8 +1,9 @@
 from rest_framework import viewsets, permissions, filters
 from .models import TouristSpot, TouristSpotsImage, LocationSpot
+from rest_framework.response import Response
 from .serializers import TouristSpotImageSerializer, TouristSpotSerializer, LocationSpotSerializer
 
-class LocationSoptViewSet(viewsets.ModelViewSet):
+class LocationSpotViewSet(viewsets.ModelViewSet):
     queryset = LocationSpot.objects.all()
     serializer_class = LocationSpotSerializer
     filter_backends = [filters.SearchFilter]
@@ -16,6 +17,17 @@ class LocationSoptViewSet(viewsets.ModelViewSet):
             permissions_classes = [permissions.AllowAny]
 
         return [permission() for permission in permissions_classes]
+
+    def list(self, request, *args, **kwargs):
+        # Comprobar si se solicita obtener todos los registros
+        if request.query_params.get('all') == 'true':
+            # Si se solicita, devolver todos los registros
+            queryset = self.get_queryset()
+            serializer = self.get_serializer(queryset, many=True)
+            return Response({"results": serializer.data})
+        
+        # Si no se solicita, seguir con el comportamiento predeterminado (paginado)
+        return super().list(request, *args, **kwargs)
 
 
 class TouristSpotViewSet(viewsets.ModelViewSet):
