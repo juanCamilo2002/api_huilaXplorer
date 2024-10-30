@@ -4,9 +4,11 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
+from apps.user.views import CustomTokenObtainPairView
 
 
 urlpatterns = [
+    path('auth/jwt/create/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
     path('auth/', include('djoser.social.urls')),

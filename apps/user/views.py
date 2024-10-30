@@ -8,9 +8,28 @@ from django.utils import timezone
 from .serializers import UserSerializer, VerifyCodeSerializer, SendCodeSerializer, ResetPasswordSerializer, ErrorResponseSerializer, SuccessResponseSerializer, UserCreateAdminSerializer
 from .custom_permissions import IsAdminOrIsSelf
 from drf_spectacular.utils import extend_schema
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 User = get_user_model()
 
+class CustomTokenObtainPairView(TokenObtainPairView):
+    def post(self, request, *args, **kwargs):
+        try:
+            response = super().post(request, *args, **kwargs)
+            return response
+        except Exception as e:
+            # Verifica si la cuenta no está activa
+            user = User.objects.filter(email=request.data.get("email")).first()
+            if user and not user.is_active:
+                return Response(
+                    {"error": "Cuenta inactiva."},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            # Si no es un problema de cuenta inactiva, asumimos que son credenciales inválidas
+            return Response(
+                {"error": "Credenciales inválidas."},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
 
 class VerifyAccountCodeNumber(APIView):
     permission_classes = [permissions.AllowAny]
@@ -67,7 +86,10 @@ class ResendVerificationCode(APIView):
             user = User.objects.get(phone_number=phone_number)
 
             # generate a new code
-            send_verification_code(user)
+            sender_code = send_reset_pass_code(user)
+
+            if sender_code["messages"][0]["status"] != "0":
+                return Response({'error': 'Error sending code'}, status=status.HTTP_400_BAD_REQUEST)
             return Response({'message': 'Verification code sent successfully'}, status=status.HTTP_200_OK)
         except User.DoesNotExist:
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
@@ -103,6 +125,28 @@ class SendResetPasswordCode(APIView):
         except User.DoesNotExist:
             return Response({'error': "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
+class VerifyResetPasswordCode(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, format=None, *args, **kwargs):
+        phone_number = request.data.get('phone_number')
+        code = request.data.get('code')
+
+        try:
+            user = User.objects.get(phone_number=phone_number)
+
+            datetime_now = timezone.now()
+
+            if datetime_now > user.expiration_code_reset_password:
+                return Response({'error': 'Code expired'}, status=status.HTTP_410_GONE)
+
+            if user.code_reset_password != code:
+                return Response({'error': 'Invalid code'}, status=status.HTTP_403_FORBIDDEN)
+
+
+            return Response({'message': 'Code verified successfully'}, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
 # reestablecer contraseña
 class ResetPassword(APIView):
@@ -121,21 +165,11 @@ class ResetPassword(APIView):
     def post(self, request, format=None, *args, **kwargs):
 
         phone_number = request.data.get('phone_number')
-        code = request.data.get('code')
         new_password = request.data.get('new_password')
         re_new_password = request.data.get('re_new_password')
 
         try:
             user = User.objects.get(phone_number=phone_number)
-
-            datetime_now = timezone.now()
-
-            if datetime_now > user.expiration_code_reset_password:
-                return Response({'error': 'Code expired'}, status=status.HTTP_400_BAD_REQUEST)
-
-            if user.code_reset_password != code:
-                return Response({'error': 'Invalid code'}, status=status.HTTP_400_BAD_REQUEST)
-
             if new_password != re_new_password:
                 return Response({'error': 'Passwords do not match'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -157,8 +191,10 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         actions = ['retrieve', 'update', 'partial_update', 'destroy']
-        if self.action == actions:
+        if self.action in actions:
             permission_classes = [IsAdminOrIsSelf]
+        elif self.action == 'create':
+            permission_classes = [permissions.AllowAny]
         else:
             permission_classes = [permissions.IsAdminUser]
 

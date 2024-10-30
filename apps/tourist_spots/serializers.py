@@ -21,7 +21,7 @@ class TouristSpotSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = TouristSpot
-        fields = ['id', 'name', 'description', 'latitude', 'longitude', 'images', 'location', 'activities']
+        fields = ['id', 'name', 'description', 'latitude', 'longitude', 'images', 'location', 'activities', 'average_rating', "num_reviews"]
 
     
     def create(self, validated_data):
