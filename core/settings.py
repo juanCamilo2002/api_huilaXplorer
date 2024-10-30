@@ -15,7 +15,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 
 
 DJANGO_APPS = [
@@ -75,7 +75,7 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+
 
 ROOT_URLCONF = 'core.urls'
 
