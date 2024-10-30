@@ -75,7 +75,7 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
-
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 
 ROOT_URLCONF = 'core.urls'
 
