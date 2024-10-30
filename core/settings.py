@@ -25,6 +25,7 @@ DJANGO_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
 ]
 
 PROJECT_APPS = ["apps.user"]
@@ -65,7 +66,7 @@ MIDDLEWARE = [
 
 STORAGES = {
     "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "BACKEND": "storages.backends.s3.S3Storage",
         "OPTIONS": {
             "location": "media/",  # O la ruta que prefieras para almacenar los archivos
         },
@@ -98,10 +99,15 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 
 DATABASES = {
-    'default': env.db('DATABASE_URL', default='postgres:///huilaxplorerDb'),
+    'default': {
+        'ENGINE': env('DB_ENGINE', default='django.db.backends.postgresql'),
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT', default='5432'),
+    }
 }
-
-DATABASES['default']['ATOMIC_REQUESTS'] = True
 
 # CORS_ALLOWED_ORIGINS = []
 CORS_ALLOW_ALL_ORIGINS = True
@@ -145,6 +151,8 @@ STATIC_URL = '/assets/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'dist', 'assets')
@@ -230,3 +238,21 @@ SPECTACULAR_SETTINGS = {
 }
 
 FRONTEND_URL = env('FRONTEND_URL')
+
+
+# Configuración de Amazon S3
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME')
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com'
+
+# Opciones de almacenamiento
+AWS_S3_FILE_OVERWRITE = False  # Evita sobrescribir archivos con el mismo nombre
+AWS_DEFAULT_ACL = None  # Desactiva las ACL predeterminadas
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',  # Control de cache
+}
+
+# Configura el backend de almacenamiento para archivos estáticos y multimedia
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
