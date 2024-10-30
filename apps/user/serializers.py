@@ -117,8 +117,7 @@ class UserCreateAdminSerializer(serializers.ModelSerializer):
         # Envía el correo
         send_mail(
             subject='Activate your account',
-            message=f'Click the link to activate your account: {
-                full_activation_link}',
+            message=f'Click the link to activate your account: {full_activation_link}',
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[user.email],
         )
