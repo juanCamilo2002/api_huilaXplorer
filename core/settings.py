@@ -37,7 +37,6 @@ LOCAL_APPS = [
     'apps.reviews',
     'apps.tourist_routes',
     'apps.stats',
-    'apps.user',
 ]
 
 THIRD_PARTY_APPS = [
