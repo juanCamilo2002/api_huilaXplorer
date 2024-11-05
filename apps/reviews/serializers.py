@@ -12,7 +12,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    user =  user = UserSerializer(read_only=True)
+    user = UserSerializer(read_only=True)
     class Meta:
         model = Review
         fields = '__all__'
