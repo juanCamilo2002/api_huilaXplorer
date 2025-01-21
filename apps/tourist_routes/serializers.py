@@ -35,7 +35,7 @@ class TouristRouteSerializer(serializers.ModelSerializer):
         instance.name = validated_data.get('name', instance.name)
         instance.description = validated_data.get('description', instance.description)
         instance.date_start = validated_data.get('date_start', instance.date_start)
-        instance.date_end = validated_data.get('date_start', instance.date_end)
+        instance.date_end = validated_data.get('date_end', instance.date_end)
         instance.save()
 
         # Manage the activities related to the route
